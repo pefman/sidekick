@@ -27,3 +27,14 @@ go.work
 # OS
 .DS_Store
 Thumbs.db
+
+# Environment variables (secrets)
+.env
+.env.*
+!.env.example
+
+# GoReleaser
+dist/
+
+# Debug logs
+sidekick-debug-*.log

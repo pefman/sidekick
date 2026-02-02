@@ -49,12 +49,21 @@ lint:
 # Create a release with goreleaser
 release:
 	@echo "📦 Creating release $(VERSION)..."
-	@goreleaser release --clean
+	@if [ -f .env ]; then \
+		export $$(cat .env | xargs) && goreleaser release --clean; \
+	else \
+		echo "⚠️  .env file not found. Please create it with GITHUB_TOKEN"; \
+		exit 1; \
+	fi
 
 # Create a snapshot release (no tags required)
 release-snapshot:
 	@echo "📦 Creating snapshot release..."
-	@goreleaser release --snapshot --clean
+	@if [ -f .env ]; then \
+		export $$(cat .env | xargs) && goreleaser release --snapshot --clean; \
+	else \
+		goreleaser release --snapshot --clean; \
+	fi
 
 # Display help
 help:
