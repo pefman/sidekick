@@ -27,8 +27,10 @@ func formatSize(bytes int64) string {
 }
 
 type InteractiveMode struct {
-	config *config.Config
-	reader *bufio.Reader
+	config          *config.Config
+	reader          *bufio.Reader
+	updateAvailable bool
+	latestVersion   string
 }
 
 func New() *InteractiveMode {
@@ -37,9 +39,22 @@ func New() *InteractiveMode {
 		cfg = config.GetDefault()
 	}
 
-	return &InteractiveMode{
+	im := &InteractiveMode{
 		config: cfg,
 		reader: bufio.NewReader(os.Stdin),
+	}
+
+	// Check for updates silently in background
+	go im.checkForUpdatesBackground()
+
+	return im
+}
+
+func (im *InteractiveMode) checkForUpdatesBackground() {
+	latest, hasUpdate, err := updater.CheckForUpdate()
+	if err == nil && hasUpdate {
+		im.updateAvailable = true
+		im.latestVersion = latest.Version()
 	}
 }
 
@@ -49,9 +64,21 @@ func (im *InteractiveMode) Run() error {
 			{Label: "Scan", Value: "scan"},
 			{Label: "Settings", Value: "settings"},
 			{Label: "Models", Value: "models"},
-			{Label: "Check for Updates", Value: "update"},
 			{Label: "Help", Value: "help"},
 			{Label: "Quit", Value: "quit"},
+		}
+
+		// Add update notification if available
+		if im.updateAvailable {
+			// Insert before Quit with line break
+			items = []MenuItem{
+				{Label: "Scan", Value: "scan"},
+				{Label: "Settings", Value: "settings"},
+				{Label: "Models", Value: "models"},
+				{Label: "Help", Value: "help"},
+				{Label: fmt.Sprintf("\n🔔 Update Available: %s", im.latestVersion), Value: "update"},
+				{Label: "Quit", Value: "quit"},
+			}
 		}
 
 		selected, err := SelectMenu("SIDEKICK - AI Code Assistant", items, 0)
