@@ -605,6 +605,11 @@ func (im *InteractiveMode) updateMenu() {
 		fmt.Printf("\n%s✗%s Update failed: %v\n", orange, reset, err)
 		fmt.Println("\nYou can also try updating via CLI:")
 		fmt.Println("  sudo sidekick update")
+		fmt.Println("\nManual install (Linux):")
+		fmt.Println("  VERSION=$(curl -s https://api.github.com/repos/pefman/sidekick/releases/latest | grep \"tag_name\" | cut -d\"\" -f4)")
+		fmt.Println("  wget https://github.com/pefman/sidekick/releases/download/$VERSION/sidekick_Linux_x86_64.tar.gz")
+		fmt.Println("  tar xzf sidekick_Linux_x86_64.tar.gz")
+		fmt.Println("  sudo mv sidekick /usr/local/sbin/")
 	} else {
 		fmt.Printf("\n%s✓%s Please restart sidekick to use the new version.\n", cyan, reset)
 	}
