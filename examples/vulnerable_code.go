@@ -40,7 +40,6 @@ func executeCommand(w http.ResponseWriter, r *http.Request) {
 // Example 4: Missing input validation
 func readFile(w http.ResponseWriter, r *http.Request) {
 	filename := r.URL.Query().Get("file")
-	// Path traversal vulnerability - no validation
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

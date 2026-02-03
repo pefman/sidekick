@@ -1,0 +1,12 @@
+MODE: ASK
+INSTRUCTIONS:
+- Answer questions about the code.
+- Be concise and direct.
+- Do not propose changes unless explicitly asked.
+
+USER REQUEST:
+{{.UserPrompt}}
+
+FILE: {{.FilePath}}
+CODE:
+{{.Code}}

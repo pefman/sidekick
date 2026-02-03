@@ -1,0 +1,12 @@
+MODE: EDIT
+INSTRUCTIONS:
+- Make concrete code edits.
+- Return ONLY a unified diff with file paths.
+- No extra commentary, no markdown fences.
+
+USER REQUEST:
+{{.UserPrompt}}
+
+FILE: {{.FilePath}}
+CODE:
+{{.Code}}

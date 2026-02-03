@@ -56,15 +56,14 @@ func performScan(targetPath, modelName string, debug bool, scanType, customPromp
 		return fmt.Errorf("scan failed: %w", err)
 	}
 
-	// Display results
-	displayResults(results)
+	// Display results with review mode option
+	displayResults(results, client, modelName)
 
 	return nil
 }
 
 func collectFiles(root string) ([]string, error) {
 	var files []string
-	extensions := []string{".go", ".js", ".ts", ".py", ".java", ".c", ".cpp", ".rs", ".rb", ".php"}
 
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -89,13 +88,7 @@ func collectFiles(root string) ([]string, error) {
 			}
 		}
 
-		ext := filepath.Ext(path)
-		for _, validExt := range extensions {
-			if ext == validExt {
-				files = append(files, path)
-				break
-			}
-		}
+		files = append(files, path)
 
 		return nil
 	})
@@ -103,7 +96,7 @@ func collectFiles(root string) ([]string, error) {
 	return files, err
 }
 
-func displayResults(results []scanner.ScanResult) {
+func displayResults(results []scanner.ScanResult, client *ollama.Client, modelName string) {
 	filesWithIssues := 0
 
 	for _, result := range results {
@@ -112,6 +105,7 @@ func displayResults(results []scanner.ScanResult) {
 			fmt.Printf("\n%s━━━ %s ━━━%s\n", orange, filepath.Base(result.FilePath), reset)
 			fmt.Println(result.RawFindings)
 			fmt.Println()
+
 		}
 	}
 
@@ -124,4 +118,6 @@ func displayResults(results []scanner.ScanResult) {
 		fmt.Printf("   %s✓%s No issues detected!\n", cyan, reset)
 	}
 	fmt.Printf("%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n", orange, reset)
+
+	// Review mode is no longer offered from scan output.
 }

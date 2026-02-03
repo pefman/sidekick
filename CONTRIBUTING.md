@@ -23,13 +23,15 @@ Thank you for your interest in contributing to Sidekick!
 sidekick/
 ├── cmd/                   # CLI commands (cobra)
 │   ├── root.go           # Root command setup
-│   ├── scan.go           # Security scanning command
+│   ├── scan.go           # Scan command
 │   └── install.go        # Installation command
 ├── internal/
+│   ├── interactive/      # Prompt-first UI
+│   ├── prompts/          # Prompt templates
 │   ├── ollama/           # Ollama API client
-│   └── scanner/          # Security scanner logic
-├── examples/             # Example vulnerable code
-├── main.go              # Entry point
+│   └── scanner/          # Scan/analysis logic
+├── examples/             # Example code
+├── main.go               # Entry point
 └── README.md
 ```
 
@@ -48,7 +50,7 @@ sidekick/
 3. **Test your changes**
    ```bash
    make build
-   ./sidekick scan examples/
+   ./sidekick
    ```
 
 4. **Format and lint**
@@ -93,11 +95,11 @@ func init() {
 }
 ```
 
-## Adding New Scanner Features
+## Prompts & Modes
 
-1. Modify `internal/scanner/scanner.go`
-2. Update the prompt in `createSecurityPrompt()`
-3. Update parsing logic in `parseSecurityIssues()`
+- Ask/Edit/Plan prompts live in `internal/prompts/custom/`
+- Use `internal/prompts` helpers for rendering
+- Keep prompt changes documented in release notes
 
 ## Code Style
 

@@ -36,7 +36,7 @@ func SelectMenu(title string, items []MenuItem, currentIndex int) (int, error) {
 			}
 		}
 
-		fmt.Printf("\n%sUse ↑↓ arrows, Enter/→ to select, ←/Esc to go back%s\n", gray, reset)
+		fmt.Printf("\n%sUse ↑↓ arrows, Enter/→ to select, ←/Esc to go back%s\n", orange, reset)
 
 		// Read key
 		_, key, err := keyboard.GetKey()

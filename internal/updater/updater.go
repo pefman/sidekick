@@ -68,7 +68,9 @@ func Update() error {
 		return fmt.Errorf("executable is not writable. Please run with sudo or as root")
 	}
 
-	updater, err := selfupdate.NewUpdater(selfupdate.Config{})
+	updater, err := selfupdate.NewUpdater(selfupdate.Config{
+		Validator: &selfupdate.ChecksumValidator{UniqueFilename: "checksums.txt"},
+	})
 	if err != nil {
 		return fmt.Errorf("could not create updater: %w", err)
 	}

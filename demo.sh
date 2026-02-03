@@ -1,42 +1,18 @@
 #!/bin/bash
-# Demo script for Sidekick interactive features
 
-echo "╔════════════════════════════════════════════════════════════╗"
-echo "║              SIDEKICK - Interactive Demo                  ║"
-echo "╚════════════════════════════════════════════════════════════╝"
-echo ""
-echo "🎮 Interactive Mode Features:"
-echo ""
-echo "1. Launch interactive mode:"
-echo "   $ ./sidekick"
-echo ""
-echo "2. Navigate with keyboard shortcuts:"
-echo "   • Press 'S' or '1' - Scan codebase"
-echo "   • Press 'T' or '2' - Settings menu"
-echo "   • Press 'M' or '3' - View models"
-echo "   • Press 'H' or '4' - Help"
-echo "   • Press 'Q' or '5' - Quit"
-echo ""
-echo "3. Settings are saved in: ~/.sidekick/config.json"
-echo ""
-echo "⚙️  Settings Menu Options:"
-echo "   • Change default model"
-echo "   • Change Ollama URL"
-echo "   • Toggle verbose mode"
-echo "   • Change default output format (text/html)"
-echo "   • Reset to defaults"
-echo ""
-echo "📊 Scan Features:"
-echo "   • Choose scan path interactively"
-echo "   • Select output format (text or HTML report)"
-echo "   • Override default model per scan"
-echo "   • Real-time progress and results"
-echo ""
-echo "🚀 Command Line Mode (for scripts):"
-echo "   $ ./sidekick scan                     # Quick scan"
-echo "   $ ./sidekick scan --format html       # Generate report"
-echo "   $ ./sidekick scan -m deepseek-r1:14b  # Use specific model"
-echo ""
-echo "💡 Try it now:"
-echo "   $ ./sidekick"
-echo ""
+set -e
+
+echo "Sidekick Demo"
+echo
+
+echo "Launch interactive mode:"
+echo "  ./sidekick"
+echo
+
+echo "Use the prompt-first UI:"
+echo "  - Type your prompt immediately"
+echo "  - Tab to switch Ask/Edit/Plan"
+echo "  - Enter to run prompt"
+echo
+
+echo "Open menus with ↑/↓ and Enter"

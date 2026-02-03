@@ -1,0 +1,12 @@
+MODE: PLAN
+INSTRUCTIONS:
+- Provide a concise, step-by-step plan.
+- Do not output code or diffs.
+- Focus on safe, minimal changes.
+
+USER REQUEST:
+{{.UserPrompt}}
+
+FILE: {{.FilePath}}
+CODE:
+{{.Code}}

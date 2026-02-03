@@ -16,6 +16,7 @@ var (
 	targetPath string
 	modelName  string
 	debug      bool
+	scanType   string
 )
 
 var scanCmd = &cobra.Command{
@@ -34,6 +35,7 @@ func init() {
 
 	scanCmd.Flags().StringVarP(&modelName, "model", "m", cfg.DefaultModel, "Ollama model to use")
 	scanCmd.Flags().BoolVarP(&debug, "debug", "d", cfg.Debug, "Enable debug logging to file")
+	scanCmd.Flags().StringVarP(&scanType, "scan-type", "t", "security", "Scan type: security, custom, triad")
 }
 
 func runScan(cmd *cobra.Command, args []string) error {
@@ -79,7 +81,7 @@ func runScan(cmd *cobra.Command, args []string) error {
 	}
 
 	// Initialize scanner
-	s := scanner.NewScanner(client, modelName, debug, "security", "")
+	s := scanner.NewScanner(client, modelName, debug, scanType, "")
 	defer s.Close()
 
 	// Scan files
@@ -107,14 +109,13 @@ func runScan(cmd *cobra.Command, args []string) error {
 	}
 
 	// Display results
-	displayResults(results)
+	displayResults(results, client, modelName)
 
 	return nil
 }
 
 func collectFiles(root string) ([]string, error) {
 	var files []string
-	extensions := []string{".go", ".js", ".ts", ".py", ".java", ".c", ".cpp", ".rs", ".rb", ".php"}
 
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -140,14 +141,7 @@ func collectFiles(root string) ([]string, error) {
 			}
 		}
 
-		// Check if file has relevant extension
-		ext := filepath.Ext(path)
-		for _, validExt := range extensions {
-			if ext == validExt {
-				files = append(files, path)
-				break
-			}
-		}
+		files = append(files, path)
 
 		return nil
 	})
@@ -155,7 +149,7 @@ func collectFiles(root string) ([]string, error) {
 	return files, err
 }
 
-func displayResults(results []scanner.ScanResult) {
+func displayResults(results []scanner.ScanResult, client *ollama.Client, modelName string) {
 	filesWithIssues := 0
 
 	for _, result := range results {
@@ -164,6 +158,7 @@ func displayResults(results []scanner.ScanResult) {
 			fmt.Printf("\n\033[38;5;208m━━━ %s ━━━\033[0m\n", filepath.Base(result.FilePath))
 			fmt.Println(result.RawFindings)
 			fmt.Println()
+
 		}
 	}
 
@@ -176,4 +171,6 @@ func displayResults(results []scanner.ScanResult) {
 		fmt.Println("   \033[38;5;82m✓\033[0m No issues detected!")
 	}
 	fmt.Println("\033[38;5;208m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m")
+
+	// Review mode is no longer offered from scan output.
 }
