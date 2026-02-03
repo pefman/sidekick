@@ -600,16 +600,7 @@ func (im *InteractiveMode) updateMenu() {
 	}
 
 	fmt.Printf("\n%s📦 New version available: %s%s\n", orange, latest.Version(), reset)
-	fmt.Print("\nUpdate now? (y/N): ")
-	response := im.readInput()
-
-	if response != "y" && response != "Y" {
-		fmt.Println("\nUpdate cancelled.")
-		im.pressEnterToContinue()
-		return
-	}
-
-	fmt.Println()
+	fmt.Println("\nUpdating now...")
 	if err := updater.Update(); err != nil {
 		fmt.Printf("\n%s✗%s Update failed: %v\n", orange, reset, err)
 		fmt.Println("\nYou can also try updating via CLI:")
