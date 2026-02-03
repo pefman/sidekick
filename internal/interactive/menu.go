@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"sort"
 	"strings"
 	"sync"
@@ -610,6 +611,22 @@ func (im *InteractiveMode) updateMenu() {
 		fmt.Println("  wget https://github.com/pefman/sidekick/releases/download/$VERSION/sidekick_Linux_x86_64.tar.gz")
 		fmt.Println("  tar xzf sidekick_Linux_x86_64.tar.gz")
 		fmt.Println("  sudo mv sidekick /usr/local/sbin/")
+
+		if strings.Contains(strings.ToLower(err.Error()), "permission") ||
+			strings.Contains(strings.ToLower(err.Error()), "not writable") {
+			fmt.Print("\nRun update now with sudo? (y/N): ")
+			response := im.readInput()
+			if response == "y" || response == "Y" {
+				cmd := exec.Command("sudo", "sidekick", "update")
+				cmd.Stdin = os.Stdin
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				fmt.Println()
+				if runErr := cmd.Run(); runErr != nil {
+					fmt.Printf("\n%s✗%s Sudo update failed: %v\n", orange, reset, runErr)
+				}
+			}
+		}
 	} else {
 		fmt.Printf("\n%s✓%s Please restart sidekick to use the new version.\n", cyan, reset)
 	}
